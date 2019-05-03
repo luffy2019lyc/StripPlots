@@ -51,6 +51,9 @@ def plotS(filename, solar_c, solar_R, rc, coordinate):
 def main(json_data):
     """根据json数据画图"""
     rows = json_data['rows']
+
+    # 同一个p_No的画在同一张图里
+    dict = {}
     for row in rows:
         p_No = row['p_No']
         file_name = str(p_No) + '.jpg'
@@ -64,5 +67,10 @@ def main(json_data):
 
 
 if __name__ == '__main__':
-    json_data = sys.argv[1]
-    main(eval(json_data))
+    # json_data = sys.argv[1]
+    # main(eval(json_data))
+
+    import json
+    with open('bs.json') as f:
+        json_data = json.load(f)
+    main(json_data)
