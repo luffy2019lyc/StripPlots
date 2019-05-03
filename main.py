@@ -53,24 +53,32 @@ def main(json_data):
     rows = json_data['rows']
 
     # 同一个p_No的画在同一张图里
-    dict = {}
+    dict_image = {}
     for row in rows:
-        p_No = row['p_No']
-        file_name = str(p_No) + '.jpg'
-        solar_c = [float(row['x']), float(row['y'])]
-        solar_R = float(row['solar_R'])
-        rc = [float(row['r']), float(row['c'])]
-        coordinate = np.array(eval(row['ficoordinate']))
-        plotS(file_name, solar_c, solar_R, rc, coordinate)
+        file_name = str(row['p_No']) + '.jpg'
+        if file_name in dict_image:
+            dict_image[file_name]["coordinate"] = np.vstack(
+                (dict_image[file_name]["coordinate"], np.array(eval(row['ficoordinate'])))
+            )
+        else:
+            dict_image[file_name] = {}
+            dict_image[file_name]["solar_c"] = [float(row['x']), float(row['y'])]
+            dict_image[file_name]["solar_R"] = float(row['solar_R'])
+            dict_image[file_name]["rc"] = [float(row['r']), float(row['c'])]
+            dict_image[file_name]["coordinate"] = np.array(eval(row['ficoordinate']))
+
+    for key, value in dict_image.items():
+        plotS(key, dict_image[key]["solar_c"], dict_image[key]["solar_R"],
+              dict_image[key]["rc"], dict_image[key]["coordinate"])
 
     print('画图已保存')
 
 
 if __name__ == '__main__':
-    # json_data = sys.argv[1]
-    # main(eval(json_data))
-
     import json
+    # json_data = sys.argv[1]
+    # main(json.loads(json_data))
+
     with open('bs.json') as f:
         json_data = json.load(f)
     main(json_data)
