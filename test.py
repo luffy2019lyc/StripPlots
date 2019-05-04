@@ -18,3 +18,4 @@ d = {"a":{'b':'b','c':'c','d':[3,4]},"b":{'b':'b','c':'c','d':[3,4]}}
 for k,v in d.items():
     print(k,v)
 print(d["a"]["b"])
+# ok
